@@ -1,3 +1,4 @@
+from sqlalchemy.dialects.postgresql import HSTORE
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .exceptions import ImproperlyConfigured
@@ -20,6 +21,33 @@ except ImportError:
             'Could not load get_locale function from Flask-Babel. Either '
             'install babel or make a similar function and override it '
             'in this module.'
+        )
+
+
+class HSTORETranslation(HSTORE):
+    pass
+
+
+class HSTORETranslationWithLengthLimit(HSTORETranslation):
+    pass
+
+
+def HSTORETranslationFactory(max_length=None):
+    if max_length:
+        cls = HSTORETranslationWithLengthLimit
+        cls.length = max_length
+        return cls
+    else:
+        return HSTORETranslation
+
+
+class TranslationHybridProperty(hybrid_property):
+    def __init__(self, fget, fset, expr, attr):
+        self._attr = attr
+        super(TranslationHybridProperty, self).__init__(
+            fget=fget,
+            fset=fset,
+            expr=expr
         )
 
 
@@ -74,8 +102,9 @@ class TranslationHybrid(object):
         return lambda cls: attr
 
     def __call__(self, attr):
-        return hybrid_property(
+        return TranslationHybridProperty(
             fget=self.getter_factory(attr),
             fset=self.setter_factory(attr),
-            expr=self.expr_factory(attr)
+            expr=self.expr_factory(attr),
+            attr=attr
         )

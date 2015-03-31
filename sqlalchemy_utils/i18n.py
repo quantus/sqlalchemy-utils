@@ -1,4 +1,3 @@
-from sqlalchemy.dialects.postgresql import HSTORE
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .exceptions import ImproperlyConfigured
@@ -22,23 +21,6 @@ except ImportError:
             'install babel or make a similar function and override it '
             'in this module.'
         )
-
-
-class HSTORETranslation(HSTORE):
-    pass
-
-
-class HSTORETranslationWithLengthLimit(HSTORETranslation):
-    pass
-
-
-def HSTORETranslationFactory(max_length=None):
-    if max_length:
-        cls = HSTORETranslationWithLengthLimit
-        cls.length = max_length
-        return cls
-    else:
-        return HSTORETranslation
 
 
 class TranslationHybridProperty(hybrid_property):

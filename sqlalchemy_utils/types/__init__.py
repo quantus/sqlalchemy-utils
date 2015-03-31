@@ -5,6 +5,7 @@ from sqlalchemy.orm.collections import InstrumentedList as _InstrumentedList
 from .arrow import ArrowType
 from .choice import Choice, ChoiceType
 from .color import ColorType
+from .constrained_dict import ConstrainedDict
 from .country import Country, CountryType
 from .email import EmailType
 from .encrypted import EncryptedType
@@ -31,6 +32,7 @@ __all__ = (
     Choice,
     ChoiceType,
     ColorType,
+    ConstrainedDict,
     Country,
     CountryType,
     DateRangeType,

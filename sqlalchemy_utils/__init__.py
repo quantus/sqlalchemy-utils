@@ -61,6 +61,7 @@ from .types import (  # noqa
     Choice,
     ChoiceType,
     ColorType,
+    ConstrainedDict,
     Country,
     CountryType,
     DateRangeType,
